@@ -1,17 +1,32 @@
 import pygame
 from constants import *
+from player import Player
+
+#start venv mode: source venv/bin/activate
 
 def main():
     pygame.init()
-    print("Starting asteroids!")
+    clock = pygame.time.Clock()
+    dt = 0
+    print(f"Starting asteroids!\nScreen width: {SCREEN_WIDTH}\nScreen height: {SCREEN_HEIGHT}")
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    Player.containers = (updatable, drawable)
+    player = Player((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))
+    # print(f"Updatable group size: {len(updatable)}")
+    # print(f"Drawable group size: {len(drawable)}")
     while True:
         screen.fill((0,0,0))
+        for i in updatable:
+            i.update(dt)
+        for i in drawable:
+            i.draw(screen)
         pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
+        clock.tick(60)
+        dt = (clock.tick(60)) / 1000
 
-if __name__ == "__main__":
-    main()
-    print(f"Screen width: {SCREEN_WIDTH}\nScreen height: {SCREEN_HEIGHT}") # type: ignore
+main()
