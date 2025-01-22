@@ -1,8 +1,10 @@
 import pygame
 from constants import *
 from player import Player
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
 
-#start venv mode: source venv/bin/activate
+# --start venv mode-- : source venv/bin/activate
 
 def main():
     pygame.init()
@@ -12,8 +14,12 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()
     Player.containers = (updatable, drawable)
+    Asteroid.containers = (asteroids, updatable, drawable)
+    AsteroidField.containers = (updatable)
     player = Player((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))
+    astfield = AsteroidField()
     # print(f"Updatable group size: {len(updatable)}")
     # print(f"Drawable group size: {len(drawable)}")
     while True:
@@ -22,6 +28,10 @@ def main():
             i.update(dt)
         for i in drawable:
             i.draw(screen)
+        for i in asteroids:
+            if i.collisions(player):
+                print("Game over!")
+                raise SystemExit
         pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
