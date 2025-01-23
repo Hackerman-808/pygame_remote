@@ -1,6 +1,7 @@
 import pygame
 from constants import *
 from player import Player
+from shot import Shot
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 
@@ -15,9 +16,11 @@ def main():
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
+    shots = pygame.sprite.Group()
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable)
+    Shot.containers = (shots, updatable, drawable)
     player = Player((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))
     astfield = AsteroidField()
     # print(f"Updatable group size: {len(updatable)}")
@@ -27,6 +30,8 @@ def main():
         for i in updatable:
             i.update(dt)
         for i in drawable:
+            i.draw(screen)
+        for i in shots:
             i.draw(screen)
         for i in asteroids:
             if i.collisions(player):
