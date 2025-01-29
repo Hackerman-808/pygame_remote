@@ -33,10 +33,15 @@ def main():
             i.draw(screen)
         for i in shots:
             i.draw(screen)
-        for i in asteroids:
-            if i.collisions(player):
+        for a in asteroids:
+            if a.collisions(player):
                 print("Game over!")
                 raise SystemExit
+            for s in shots:
+                if a.collisions(s):
+                    a.split()
+                    s.kill()
+                
         pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
